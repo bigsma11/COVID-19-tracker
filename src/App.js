@@ -1,25 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './App.module.css'
 import { Cards, Chart, CountryPicker } from './components'
-import { useFetchData } from './api'
-// import axios from 'axios'
-
-const URL = 'https://covid19.mathdro.id/api'
+import { useFetchData, BASIC_URL } from './api'
+import logo from './covid.png'
 
 function App() {
-  const [data, isFetchDataError] = useFetchData(URL)
-  const [dailyData, isFetchDailyDataError] = useFetchData(`${URL}/daily`)
+  const [country, setCountry] = useState('')
+  const [data, isError] = useFetchData(BASIC_URL, country)
+
+  const handleCountryChange = (country) => {
+    setCountry(country)
+  }
 
   return (
     <>
-      {isFetchDataError && <div>Something went wrong when fetching basic data</div>}
-      {isFetchDailyDataError && <div>Something went wrong when fetching daily data</div>}
+      <img src={logo} alt="covid" />
+      {isError && <div>Something went wrong when fetching basic data</div>}
       {!data ? (
-        <div>Loading...</div>
+        <div>Loading basic data...</div>
       ) : (
         <div className={styles.container}>
           <Cards {...data} />
-          <CountryPicker />
+          <CountryPicker onCountryChange={handleCountryChange} />
           <Chart />
         </div>
       )}

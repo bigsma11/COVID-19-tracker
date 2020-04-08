@@ -8,7 +8,9 @@ function Cards({ lastUpdate, confirmed, recovered, deaths }) {
   const messages = ['active cases of', 'recoveries from', 'deaths caused by']
   const updateDate = new Date(lastUpdate).toDateString()
 
-  return (
+  return !confirmed ? (
+    <div>Loading cards data...</div>
+  ) : (
     <div className={styles.container}>
       <Grid container spacing={3} justify="center">
         {Object.keys(infos).map((key, index) => (
