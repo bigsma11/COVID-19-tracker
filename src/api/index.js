@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 
-const url = 'https://covid19.mathdro.id/api'
+// abstract the fetch operation to a custom hook
 
-export const useFetchData = () => {
+export const useFetchData = (url) => {
   const [data, setData] = useState(null)
   const [isError, setIsError] = useState(false)
 
@@ -12,18 +12,15 @@ export const useFetchData = () => {
       setIsError(false)
 
       try {
-        const {
-          data: { confirmed, recovered, deaths, lastUpdate },
-        } = await axios(url)
-
-        setData({ confirmed, recovered, deaths, lastUpdate })
+        const response = await axios(url)
+        setData(response.data)
       } catch (error) {
         setIsError(true)
       }
     }
 
     fetchData()
-  }, [])
+  }, [url])
 
-  return { data, isError }
+  return [data, isError]
 }

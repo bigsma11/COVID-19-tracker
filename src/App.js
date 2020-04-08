@@ -2,14 +2,18 @@ import React from 'react'
 import styles from './App.module.css'
 import { Cards, Chart, CountryPicker } from './components'
 import { useFetchData } from './api'
+// import axios from 'axios'
+
+const URL = 'https://covid19.mathdro.id/api'
 
 function App() {
-  const { data, isError } = useFetchData()
-  console.log(data)
+  const [data, isFetchDataError] = useFetchData(URL)
+  const [dailyData, isFetchDailyDataError] = useFetchData(`${URL}/daily`)
 
   return (
     <>
-      {isError && <div>Something went wrong when fetching api</div>}
+      {isFetchDataError && <div>Something went wrong when fetching basic data</div>}
+      {isFetchDailyDataError && <div>Something went wrong when fetching daily data</div>}
       {!data ? (
         <div>Loading...</div>
       ) : (
